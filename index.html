@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+    </head>
+    <body>
+        <div id="core"></div>
+        <script type="text/babel">
+            function Main() {
+                const [todos, setTodos] = React.useState([])
+                const [todo, setTodo] = React.useState({
+                    id: 0,
+                    text: "",
+                    description: ""
+                })
+
+                const [currentTodo, setCurrentTodo] = React.useState("")
+
+                function todoText(event) {
+                    setTodo({
+                        ...todo,
+                        text: event.target.value,
+                    })
+                }
+
+                function todoDescription(e) {
+                    setTodo({
+                        ...todo,
+                        description: e.target.value
+                    })
+                }
+
+                function addTodo(event) {
+                    event.preventDefault()
+                    const newTodo = todo
+                    newTodo.id += 1
+                    setTodos([...todos, newTodo])
+                    setTodo({
+                        ...todo,
+                        text: "",
+                        description: ""
+                    })
+                }
+
+                return (
+                    <div>
+                        <form onSubmit={addTodo}>
+                            <input
+                                type="text"
+                                value={todo.text}
+                                onChange={todoText}
+                            />
+                        </form>
+                        <form onSubmit={addTodo}>
+                            <input
+                                type="text"
+                                value={todo.description}
+                                onChange={todoDescription}
+                            />
+                            <button>Добавить</button>
+                        </form>
+                        <TodoList todos={todos}/>
+                    </div>
+                )
+            }
+
+            function TodoList({todos}) {
+                return (
+                    <div>
+                        {todos.map(elem => <TodoItem key={elem.id} todoObject = {elem}/>)}
+                    </div>
+                )
+            }
+
+            function TodoItem({todoObject}) {
+                return (
+                   <div>
+                        <h1>{todoObject.id}. {todoObject.text}</h1>
+                        <div>{todoObject.description}</div>
+                   </div>
+                )
+            }
+
+            ReactDOM.render(<Main/>, document.getElementById("core"))
+        </script>
+    </body>
+</html>
